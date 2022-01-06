@@ -13,25 +13,25 @@ The parameters must be passed respecting the following order.
 4) xi  = float >=1: shape parameter to indicate how stylized is the nested curve
 5) P   = in [0, 1] value of the parameter that control the amount of noise outside a perfect nested 
 6) mu  = in [0, 1] value of the parameter that control the amount of noise outside the blocks
-## output:
+## Output:
 1) The function return each generated network in matrix format in a .csv file with the word prefix "edges".
 	
 If the number of columns nodes is not given, the function will assume that we want to generate a unipartite networks.
 
-### example: 
-```
+### Example: 
+``` sh
 python3 generate_synthetic_networks.py 20 30 2 2.2 0.1 0.1
 
 ```
-### example 2: 
+### Example 2: 
 
-If you want to generate several networks with varying values of a parameter. To generate networks for different parameters reproduce the following example in a nested loop
-```
-for B in $(seq 1 0.5 5); # B parameter from 1 to 5 with 0.5 increments
-do
+If you want to generate several networks with varying values of a parameter. To generate networks for different parameters reproduce the following bash example in a nested loop
+``` bash
+for B in $(seq 1 0.5 5); do
    python generate_synthetic_networks.py 20 30 $B 2 0.1 0.1 &
 done
 ```
+Where in this example the parameter `B` is scanned from 1 to 5 with 0.5 increments
 # Citations
 
 A. Solé-Ribalta, CJ. Tessone, M S. Mariani, and J Borge-Holthoefer. Revealing in-block nestedness: Detection and benchmarking, Phys. Rev. E 97, 062302 (2018). DOI: [10.1103/PhysRevE.97.062302](https://doi.org/10.1103/PhysRevE.97.062302)
