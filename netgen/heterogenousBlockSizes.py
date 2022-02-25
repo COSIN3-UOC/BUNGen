@@ -38,8 +38,8 @@ def heterogenousBlockSizes(B:int,N:int,x_min:int = None,alpha:float = 2.5) -> Li
     """
     if x_min is None:
         x_min=(N*0.1)
-    if 3 <= alpha or alpha < 2:
-        raise ValueError("alpha must be between (2,3)")
+    if 3 <= alpha or alpha < 1:
+        raise ValueError("alpha must be between (1,3)")
     clsum=1
     maxn=N
     while (clsum!=N) or (maxn>=N/2):
