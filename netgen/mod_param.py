@@ -1,7 +1,7 @@
 from typing import List
 
 
-def mod_param(rows:int, cols:int, B:int) -> List[int,int]:
+def mod_param(rows: int, cols: int, B: int) -> List[int]:
     """
     function to obtain the number of rows and cols belonging to a block, given the
     total size of the initial matrix and the number of blocks. It was made this way
@@ -29,4 +29,4 @@ def mod_param(rows:int, cols:int, B:int) -> List[int,int]:
     pr = 0.5 if (rows == cols) else (rows / N)
     cx = int(Nb * (1 - pr))
     cy = int(Nb * pr)
-    return cy, cx
+    return [cy, cx]

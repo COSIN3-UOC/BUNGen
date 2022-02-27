@@ -1,3 +1,4 @@
+from numpy import power
 from numpy.typing import ArrayLike
 
 
@@ -16,4 +17,4 @@ def ballcurve(x: ArrayLike, xi: float) -> ArrayLike:
     y: 1D array, [0,1]
         evaluated function
     """
-    return 1 - (1 - (x) ** (1 / xi)) ** xi
+    return 1 - power(1 - power(x, 1 / xi), xi)

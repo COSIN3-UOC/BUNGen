@@ -1,80 +1,118 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
-Created on Mon Apr 16 11:07:47 2018
+Created on Fri Feb 25 18:41:27 2022
 
 @author: mariapalazzi
 """
-from numpy import savetxt
+from dataclasses import dataclass
+from typing import List
+from numpy.typing import ArrayLike
+from numpy import array, savetxt, fill_diagonal, triu
 from netgen import network_generator
+from netgen.heterogenousBlockSizes import heterogenousBlockSizes
+from netgen.xiFunConn import xiFunConn
 from os.path import isfile
-import sys
+from numpy.random import uniform
+import argparse
 
 
-def exploring_transitions(
-    bipartite: bool,
-    rw: int,
-    cl: int,
-    b: float,
-    xi: float,
-    P: float,
-    mu: float,
-) -> None:
-    """
-    function to generate synthetic unipartite networks with different planted partitions employing
-    the benchmark model introduced by ASR et al, PRE 2018, and performs structural analysis by means
-    of calculation of nestedness, modularity and in-block nestedness.
+@dataclass
+class NetworkGenerator:
+    rows: int
+    columns: int
+    block_number: int
+    P: float
+    mu: float
+    alpha: float
+    min_block_size: int
+    # net_type: str
 
-    The function generate a file containing the generated network in matrix format
+    def __post_init__(self):
+        self.P = round(self.P, 2)
+        self.mu = round(self.mu, 2)
+        self.columns = self.rows if self.columns is None else self.columns
+        self.alpha = 2.5 if self.alpha is None else self.alpha
+        self.min_block_size = 0 if self.min_block_size is None else self.min_block_size
+        self.net_type = "unipartite" if self.rows == self.columns else "bipartite"
+        self.get_block_sizes()
 
-    Inputs:
-    ----------
-       bipartite:
-           a boolean to indicate if you want to generate bipartite (True) or unipartite (False) networks
-       rw:
-           number of row nodes per block
-       cl: optional
-           number of colum nodes per block
-       b:
-           number of blocks
-       xi:
-           shape parameter
-       P:
-          parameter that determines the amount of links outside the perfect nested structure
-       mu:
-           parameter that determines the amount of inter blocks links
-    """
-    xi = round(xi, 2)
-    P = round(P, 2)
-    mu = round(mu, 2)
+    def get_block_sizes(self) -> tuple[List[int], List[int]]:
+        self.cy = heterogenousBlockSizes(
+            self.block_number, self.rows, alpha=self.alpha, min_block_size=self.min_block_size
+        )
+        if self.rows == self.columns:
+            self.cx = self.cy
+        else:
+            self.cx = heterogenousBlockSizes(
+                self.block_number, self.columns, alpha=self.alpha, min_block_size=self.min_block_size
+            )
+        return self.cx, self.cy
 
-    if bipartite == False:
-        name = f"edges_synthetic_unipartite_B{b}_xi{xi}_P{P}_mu{mu}.csv"
-    else:
-        name = f"edges_synthetic_bipartite_B{b}_xi{xi}_P{P}_mu{mu}.csv"
-    print(name.replace("_", " ")[:-4])
+    def generate_synthetic_network(self, xi: float) -> tuple[ArrayLike, ArrayLike]:
+        Mij = network_generator(self.rows, self.columns, self.block_number, self.cy, self.cx, xi, self.P, self.mu)
+        Mrand = array(uniform(0,1,size=(self.rows, self.columns)))
+        M = (Mij > Mrand).astype(int)
+        if self.rows == self.columns:
+            fill_diagonal(M, 0)
+            M = triu(M, k=1) + (triu(M, k=1)).T
+        return Mij, M
 
-    if not isfile(f"./{name}"):
-        # generating the synthetic networks (fill and  triu for uni(bi)partite)
-        print("Creating the synthetic network for the parameters given")
-        M_ = network_generator(rw, cl, b, xi, P, mu, bipartite)
-        savetxt(name, M_.astype(int), fmt="%d", delimiter=",")
-    else:
-        print("Nothing to do:")
-        print("\tA file with the same parameters already exists")
+    def safe_to_file(self, returnPij, xi, name):
+        # generating the synthetic networks (fill and  triu for unipartite)
+        if isfile(f"./{name}"):
+            print("Nothing to do:")
+            print("\tA file with the same parameters already exists")
+        else:
+            print("Creating the synthetic network for the parameters given")
+            Mij, M = self.generate_synthetic_network(xi)
+            savetxt(name, M, fmt="%d", delimiter=",")
+            if returnPij == True:
+                Pijname = f"pij_bipartite_B{self.block_number}_xi{xi}_P{self.P}_mu{self.mu}.csv"
+                savetxt(Pijname, Mij, fmt="%4f", delimiter=",")
+
+    def __call__(self, fixedConn: bool, returnPij: bool, shape: float) -> None:
+        if fixedConn == True:
+            xi = xiFunConn(self.cx, self.cy, self.rows, self.columns, shape)
+            print(f"xi value for desired connectance {xi}")  # to verify
+        else:
+            xi = round(shape, 2)
+        name = f"matrix_synthetic_{self.net_type}_B{self.block_number}_xi{xi}_P{self.P}_mu{self.mu}.csv"
+        print(name.replace("_", " ")[:-4])
+
+        self.safe_to_file(returnPij, xi, name)
 
 
 if __name__ == "__main__":
-    shift = 0
-    bipartite = False
-    if len(sys.argv) == 7:
-        bipartite = True
-        shift = 1
-    parameters = dict(
-        bipartite=bipartite,
-        rw=int(sys.argv[1]),
-        cl=int(sys.argv[1 + shift]),
-        b=float(sys.argv[2 + shift]),
-        xi=float(sys.argv[3 + shift]),
-        P=float(sys.argv[4 + shift]),
-        mu=float(sys.argv[5 + shift]),
+
+    parser = argparse.ArgumentParser(
+        prog="NetworkGenerator",
+        description="""Generator of synthetic unipartite (or bipartite) networks with different planted partitions
+    employing a variation of the benchmark model introduced by ASR et al, PRE 2018.\n
+    The function generate a file containing the generated network in matrix format""",
     )
-    exploring_transitions(**parameters)
+
+    parser.add_argument("rows", type=int, help="number of row nodes")
+    parser.add_argument("columns", type=int, help="number of column nodes")
+    parser.add_argument("block_number", type=int, help="B")
+    parser.add_argument("P", type=float, help="P")
+    parser.add_argument("mu", type=float, help="mu")
+    parser.add_argument("shape", type=float, help="shape")
+    parser.add_argument("-a", "--alpha", type=float, help="alpha")
+    parser.add_argument("-b", "--min_block_size", type=int, help="min block size")
+    parser.add_argument("-f", "--fixedConn", action="store_true", help="fixed Conn")
+    parser.add_argument("-p", "--returnPij", action="store_true", help="return Pij")
+
+    # args = parser.parse_args("200 100 2 0 0 1.5 -a 0".split())
+    args = parser.parse_args()
+
+    generator = NetworkGenerator(
+        rows=args.rows,
+        columns=args.columns,
+        block_number=args.block_number,
+        P=args.P,
+        mu=args.mu,
+        alpha=args.alpha,
+        min_block_size=args.min_block_size,
+    )
+    generator(fixedConn=args.fixedConn, returnPij=args.returnPij, shape=args.shape)
