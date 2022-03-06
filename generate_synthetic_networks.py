@@ -5,8 +5,7 @@ Created on Fri Feb 25 18:41:27 2022
 
 @author: mariapalazzi
 """
-from genericpath import isfile
-
+from os.path import isfile
 from numpy import savetxt
 from netgen import NetworkGenerator
 import argparse
