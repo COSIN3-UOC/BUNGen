@@ -1,1 +1,1 @@
-from .network_generator import network_generator
+from .NetworkGenerator import NetworkGenerator
