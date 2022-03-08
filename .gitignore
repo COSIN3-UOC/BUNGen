@@ -1,7 +1,6 @@
 Pipfile.lock
 .idea/
 .vscode/
-.mypy_cache/
 *pycache*/
 .*~
 *.csv

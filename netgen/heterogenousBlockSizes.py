@@ -46,6 +46,10 @@ def heterogenousBlockSizes(B: int, N: int, min_block_size: int = 0, alpha: float
             raise ValueError(f"The number of nodes must be divisible by B. {N} % {B} = {N%B}")
         else:
             return [mod_param(N, N, B)[0]] * B
+
+    if B == 2:
+        return [N - (N // B) , N // B]
+
     if 3 <= alpha or alpha < 1:
         raise ValueError("alpha must be between (1,3)")
     clsum = 1
