@@ -1,38 +1,49 @@
 #  Generate synthetic networks with Nested, Modular and In-block nested structures
 
-Generate synthetic networks with predetermined nested, modular or in-block nested structure, with different levels of noise. This code employs a modification of the benchmark model introduced by Solé-Ribalta et al, PRE 2018 (https://doi.org/10.1103/PhysRevE.97.062302), in which one can networks with a fixed block size and increasing number of blocks, instead of networks with fixed size. 
+Generate synthetic networks with predetermined nested, modular or in-block nested structure, with different levels of noise. This code employs a modification of the benchmark model introduced by Solé-Ribalta et al, PRE 2018 (https://doi.org/10.1103/PhysRevE.97.062302), in which one can produce networks with different block sizes (following a powerlaw), instead of networks with equally sized blocks. 
 
-The parameters must be passed respecting the following order.
-    
+The parameters of the model are the following.
         
 ## Inputs:
        
 1) rw  = int: number of row nodes that form a block
 2) cl  = int: number of col nodes that form a block
-3) B   = float >= 1: number of blocks on which the main matrix will be divided
-4) xi  = float >=1: shape parameter to indicate how stylized is the nested curve
-5) P   = in [0, 1] value of the parameter that control the amount of noise outside a perfect nested 
-6) mu  = in [0, 1] value of the parameter that control the amount of noise outside the blocks
+3) B   = int >= 1: number of blocks on which the main matrix will be divided
+4) P   = in [0, 1] value of the parameter that control the amount of noise outside a perfect nested 
+5) mu  = in [0, 1] value of the parameter that control the amount of noise outside the blocks
+6) alpha = float: bounded in (x1,x2) be the scaling parameter of the distribution, default 2.5. 
+	For networks with equal block size set alpha = 0.
+7) bipartite = bool: True for bipartite networks, false for unipartite. If not given it will generate a unipartite network.
+8) min_block_size = int: minimum block size, default 10% of rw and cl, respectively.
+9) fixedConn = bool: True if you want to produce with fixed connetance and estimate a xi value. False if you want to set an specific xi value.
+10) link_density = float: If fixedConn = True, this parameter specifies the desired connectance [0,1]. If fixedConn = False it specifies xi >= 1.
+
 ## Output:
-1) The function return each generated network in matrix format in a .csv file with the word prefix "edges".
+An array that corresponds to the binary synthetic adjacency matrix (biadjacency for bipartite cases), and/or an array with the matrix of link probabilities.
+
+## System Requirements 	
 	
-If the number of columns nodes is not given, the function will assume that we want to generate a unipartite networks.
+Python 3.x.
+numpy>=1.20.0
+scipy=*
 
-### Example: 
+## Use examples: 
+### To use as a library
+
+### From the commmand line
+This script will save the output matrices in csv files
 ``` sh
-python3 generate_synthetic_networks.py 20 30 2 2.2 0.1 0.1
+python generate_synthetic_networks.py 100 200 
 
 ```
-### Example 2: 
+For help type:
+``` sh
+python generate_synthetic_networks.py -h
 
-If you want to generate several networks with varying values of a parameter. To generate networks for different parameters reproduce the following bash example in a nested loop
-``` bash
-for B in $(seq 1 0.5 5); do
-   python generate_synthetic_networks.py 20 30 $B 2 0.1 0.1 &
-done
 ```
-Where in this example the parameter `B` is scanned from 1 to 5 with 0.5 increments
+
 # Citations
+MJ Palazzi, A Lampo, A Solé-Ribalta, and J Borge-Holthoefer. To fill in
 
 A. Solé-Ribalta, CJ. Tessone, M S. Mariani, and J Borge-Holthoefer. Revealing in-block nestedness: Detection and benchmarking, Phys. Rev. E 97, 062302 (2018). DOI: [10.1103/PhysRevE.97.062302](https://doi.org/10.1103/PhysRevE.97.062302)
 
