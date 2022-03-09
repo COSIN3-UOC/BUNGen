@@ -58,7 +58,7 @@ class NetworkGenerator:
     def __post_init__(self) -> None:
         self.get_block_sizes()
         if self.fixedConn and self.link_density>1:
-            raise ValueError(f"If parameter 'fixedConn' is True, then 'link_density' cannot be greater then 1")
+            raise ValueError(f"If parameter 'fixedConn' is True, then 'link_density' cannot be greater than 1")
     
     def __call__(self, **kwargs) -> tuple[ArrayLike, ArrayLike]:
         for param in self.__annotations__.keys():
