@@ -5,12 +5,12 @@ Generate synthetic networks with predetermined nested, modular or in-block neste
 The parameters of the model are the following.
         
 ## Inputs:
-       
-1) rw  = int: number of row nodes that form a block
-2) cl  = int: number of col nodes that form a block
-3) B   = int >= 1: number of blocks on which the main matrix will be divided
+positional arguments:
+1) rows  = int: number of row nodes that form a block
+2) cols  = int: number of col nodes that form a block
+3) block_number   = int >= 1: number of blocks on which the main matrix will be divided
 4) P   = in [0, 1] value of the parameter that control the amount of noise outside a perfect nested 
-5) mu  = in [0, 1] value of the parameter that control the amount of noise outside the blocks
+5) mu  = in [0, 1] value of the parameter that control the amount of noise outside the blocks.
 6) alpha = float: bounded in (x1,x2) be the scaling parameter of the distribution, default 2.5. 
 	For networks with equal block size set alpha = 0.
 7) bipartite = bool: True for bipartite networks, false for unipartite. If not given it will generate a unipartite network.
@@ -29,14 +29,47 @@ scipy=*
 
 ## Use examples: 
 ### To use as a library
+To produce a single network with desired parameters within a custom made script. User can proceed in the following way.
+```python
+from netgen import NetworkGenerator
 
-### From the commmand line
-This script will save the output matrices in csv files
-``` sh
-python generate_synthetic_networks.py 100 200 
+M,_ = NetworkGenerator.generate(500, 500, 4, bipartite=True, P=0.5, mu=0.5, 
+	alpha=2.5, min_block_size=0, fixedConn=False, link_density=2.45)
 
 ```
-For help type:
+Keep in mind that the parameters are positional. If user does not pass the parameters as named arguments order must be respected. If the user wants the function to return the matrix of link probabilities edit the line above by replacing M,_ with M,Pij or  _ ,Pij. 
+
+To produce several networks simultaneously while varying some parameter and keeping others fixed:
+```python
+from netgen import NetworkGenerator
+
+gen =  NetworkGenerator(500, 500, 4, bipartite=True, P=0.5, alpha=2.5, 
+	min_block_size=0, fixedConn=False, link_density=2.45)
+
+for p in np.arange(0,1,0.2):
+     M,_ = gen(P=p)
+     # do something with each M (plot, save, append, etc)
+
+```
+
+### From the commmand line
+This script will save the output matrices in csv files. Produce a network with certain number of rows, cols, blocks, xi and noise. (fixedConn false by default).
+``` sh
+python generate_synthetic_networks.py 100 200 2 0.1 0.1 2.05
+
+```
+If you want to produce a network with a given connectance replace fixedConn to true and change xi value for the desired connectance value by typing:
+``` sh
+python generate_synthetic_networks.py 100 200 2 0.1 0.1 .005 -f
+
+```
+To modify the remaining parameters just add -a value if you want to modify the alpha default value from the powerlaw
+``` sh
+python generate_synthetic_networks.py 100 200 2 0.1 0.1 .005 -f -a 2.1
+
+```
+
+For help and description of the parameters type:
 ``` sh
 python generate_synthetic_networks.py -h
 
