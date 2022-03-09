@@ -53,16 +53,5 @@ if __name__ == "__main__":
     else:
         print("Creating the synthetic network for the parameters given")
         M, _ = gen()
-        # M,_ = NetworkGenerator.generate(
-        #     rows=args.rows,
-        #     columns=args.columns,
-        #     block_number=args.block_number,
-        #     bipartite=args.unipartite,
-        #     P=args.P,
-        #     mu=args.mu,
-        #     alpha=args.alpha,
-        #     min_block_size=args.min_block_size,
-        #     fixedConn=args.fixedConn,
-        #     link_density=args.link_density,
-        # )
+        # M,_ = NetworkGenerator.generate(rows=args.rows,columns=args.columns,block_number=args.block_number,bipartite=args.unipartite,P=args.P,mu=args.mu,alpha=args.alpha,min_block_size=args.min_block_size,fixedConn=args.fixedConn,link_density=args.link_density,)
         savetxt(name, M, fmt="%d", delimiter=",")

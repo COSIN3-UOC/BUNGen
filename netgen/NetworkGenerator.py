@@ -55,6 +55,11 @@ class NetworkGenerator:
     def net_type(self) -> str:
         return "bipartite" if self.bipartite else "unipartite"
     
+    def __post_init__(self) -> None:
+        self.get_block_sizes()
+        if self.fixedConn and self.link_density>1:
+            raise ValueError(f"If parameter 'fixedConn' is True, then 'link_density' cannot be greater then 1")
+    
     def __call__(self, **kwargs) -> tuple[ArrayLike, ArrayLike]:
         for param in self.__annotations__.keys():
             if param in kwargs:
@@ -62,8 +67,6 @@ class NetworkGenerator:
         
         self.P = round(self.P, 2)
         self.mu = round(self.mu, 2)
-
-        self.get_block_sizes()
 
         if not self.bipartite and self.columns != self.rows:
             raise ValueError("For unipartite configuration, the number of columns and rows must be the same.")
