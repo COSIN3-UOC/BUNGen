@@ -6,26 +6,26 @@ The parameters of the model are the following.
         
 ## Inputs:
 positional arguments:
-1) rows  = int: number of row nodes that form a block
-2) cols  = int: number of col nodes that form a block
-3) block_number   = int >= 1: number of blocks on which the main matrix will be divided
-4) P   = in [0, 1] value of the parameter that control the amount of noise outside a perfect nested 
-5) mu  = in [0, 1] value of the parameter that control the amount of noise outside the blocks.
-6) alpha = float: bounded in (x1,x2) be the scaling parameter of the distribution, default 2.5. 
-	For networks with equal block size set alpha = 0.
-7) bipartite = bool: True for bipartite networks, false for unipartite. If not given it will generate a unipartite network.
-8) min_block_size = int: minimum block size, default 10% of rw and cl, respectively.
-9) fixedConn = bool: True if you want to produce with fixed connetance and estimate a xi value. False if you want to set an specific xi value.
-10) link_density = float: If fixedConn = True, this parameter specifies the desired connectance [0,1]. If fixedConn = False it specifies xi >= 1.
+1) rows  = int: number of row nodes.
+2) cols  = int: number of column nodes.
+3) block_number   = int >= 1: number of prescribed blocks (i.e. modules) in the network.
+4) P   = in [0, 1] parameter that controls the amount of noise outside a perfectly nested structure.
+5) mu  = in [0, 1] parameter that controls the amount of inter-block (i.e. between modules) noise.
+6) alpha = float: bounded in (x1,x2), alpha is the scaling parameter of the distribution of block sizes. Default is alpha = 2.5. 
+	For networks with equally-sized blocks set alpha = 0.
+7) bipartite = bool: True for bipartite networks, false for unipartite. If not given, it will generate a unipartite network.
+8) min_block_size = int: minimum block size, default 10% of rows and cols, respectively.
+9) fixedConn = bool: True if you want to produce a network with prescribed connetance. False if you want to set a specific xi value.
+10) link_density = float: If fixedConn = True, this parameter specifies the desired connectance [0,1]. If fixedConn = False, it specifies xi >= 0.
 
 ## Output:
-An array that corresponds to the binary synthetic adjacency matrix (biadjacency for bipartite cases), and/or an array with the matrix of link probabilities.
+A numpy matrix that corresponds to the binary synthetic adjacency matrix (biadjacency for bipartite cases), and/or a numpy matrix with link probabilities.
 
 ## System Requirements 	
 	
 - Python 3.x.
-- numpy>=1.20.0
-- scipy=*
+- numpy >= 1.20.0
+- scipy = *
 
 ## Use examples: 
 ### To use as a library
@@ -37,7 +37,7 @@ M,_ = NetworkGenerator.generate(500, 500, 4, bipartite=True, P=0.5, mu=0.5,
 	alpha=2.5, min_block_size=0, fixedConn=False, link_density=2.45)
 
 ```
-Keep in mind that the parameters are positional. If user does not pass the parameters as named arguments order must be respected. If the user wants the function to return the matrix of link probabilities edit the line above by replacing M,_ with M,Pij or  _ ,Pij. 
+Keep in mind that the parameters are positional. If user does not pass the parameters as named arguments, then order must be respected. If the user wants the function to return the matrix of link probabilities edit the line above by replacing M,_ with M,Pij or  _ ,Pij. 
 
 To produce several networks simultaneously while varying some parameter and keeping others fixed:
 ```python
