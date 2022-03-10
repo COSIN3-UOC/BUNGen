@@ -47,6 +47,8 @@ def heterogenousBlockSizes(B: int, N: int, min_block_size: int = 0, alpha: float
         else:
             return [mod_param(N, N, B)[0]] * B
 
+    if B == 1:
+        return [N]
     if B == 2:
         return [N - (N // B) , N // B]
 
