@@ -23,9 +23,9 @@ An array that corresponds to the binary synthetic adjacency matrix (biadjacency 
 
 ## System Requirements 	
 	
-Python 3.x.
-numpy>=1.20.0
-scipy=*
+- Python 3.x.
+- numpy>=1.20.0
+- scipy=*
 
 ## Use examples: 
 ### To use as a library
