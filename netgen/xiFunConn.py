@@ -47,9 +47,7 @@ def xiFunConn(
             blockRow = rowsList[i]
             blockCol = colsList[i]
             # block connectance
-            connBlock = xiConnRelationship(blockRow, blockCol, xi)
-            # block edges
-            edgeBlock = connBlock * blockRow * blockCol
+            edgeBlock = xiConnRelationship(blockRow, blockCol, xi)
             E += edgeBlock
         edgeList.append(E)
 
@@ -64,6 +62,5 @@ def xiFunConn(
 
     # output xi
     xi = f([links])[0]
-    xi = round(xi, 3)
 
     return xi
