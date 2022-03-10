@@ -7,7 +7,7 @@ Created on Thu Feb 24 20:18:06 2022
 """
 
 
-def xiConnRelationship(cl: int, rw: int, xi: float) -> float:
+def xiConnRelationship(rw: int, cl: int, xi: float) -> int:
     """
      Thi function calculates the connectance of a matrix (assuming B=1) for a given
      nested profile given by the shape parameter xi
@@ -32,5 +32,4 @@ def xiConnRelationship(cl: int, rw: int, xi: float) -> float:
             if j / rw >= y:
                 E += 1
 
-    C = round(E / (cl * rw), 2)
-    return C
+    return E
