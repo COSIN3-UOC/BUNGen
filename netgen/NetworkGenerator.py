@@ -46,7 +46,7 @@ class NetworkGenerator:
     def xi(self) -> float:
         if self.fixedConn == True:
             xi = xiFunConn(self.cx, self.cy, self.rows, self.columns, self.link_density)
-            print(f"xi value for desired connectance {xi}")  # to verify
+            print(f"xi value for desired connectance {xi:.2f}")  # to verify
         else:
             xi = round(self.link_density, 2)
         return xi
