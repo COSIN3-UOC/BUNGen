@@ -70,7 +70,7 @@ def network_generator(
         j, i = indices((cy[ii], cx[ii]))
 
         # heaviside function to produce the nested structure
-        H = ((j[::-1, :] + 1) / cy[ii]) > ballcurve((i / cx[ii]), xi)
+        H = ((j[::-1, :] ) / cy[ii]) >= ballcurve((i / cx[ii]), xi)
 
         M_no[cscy[ii] : cscy[ii + 1], cscx[ii] : cscx[ii + 1]] = H
         le += [M_no[cscy[ii] : cscy[ii + 1], cscx[ii] : cscx[ii + 1]].sum()]
@@ -88,7 +88,7 @@ def network_generator(
             else 0
         )
         # heaviside function to produce the nested structure
-        H = ((j[::-1, :] + 1) / cy[ix]) > ballcurve((i / cx[ix]), xi)
+        H = ((j[::-1, :]) / cy[ix]) >= ballcurve((i / cx[ix]), xi)
 
         # prob of having a link within blocks
         p_intra = ((1 - P + (P * Pr)) * H + Pr * (1 - H)) * (1 - Pi)
