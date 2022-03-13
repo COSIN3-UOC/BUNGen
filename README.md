@@ -43,7 +43,7 @@ To produce several networks simultaneously while varying some parameter and keep
 ```python
 from netgen import NetworkGenerator
 
-gen =  NetworkGenerator(500, 500, 4, bipartite=True, P=0.5, alpha=2.5, 
+gen =  NetworkGenerator(500, 500, 4, bipartite=True, P=0.5,mu=0.5, alpha=2.5, 
 	min_block_size=0, fixedConn=False, link_density=2.45)
 
 for p in np.arange(0,1,0.2):
