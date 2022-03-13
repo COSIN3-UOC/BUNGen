@@ -7,8 +7,7 @@ Created on Sun Feb 13 21:44:01 2022
 """
 from numpy.random import rand
 from typing import List
-
-from .mod_param import mod_param
+from math import ceil
 
 
 def heterogenousBlockSizes(B: int, N: int, min_block_size: int = 0, alpha: float = 2.5) -> List[int]:
@@ -43,9 +42,9 @@ def heterogenousBlockSizes(B: int, N: int, min_block_size: int = 0, alpha: float
         min_block_size = int(N * 0.1)
     if alpha == 0:
         if N % B != 0:
-            raise ValueError(f"The number of nodes must be divisible by B. {N} % {B} = {N%B}")
-        else:
-            return [mod_param(N, N, B)[0]] * B
+            print(f"The number of nodes is not divisible by B. {N} % {B} = {N%B}")
+            print(f"The remaining {N%B} node(s) will be redistributed along the blocks.")
+        return [ N//B + (ceil((N%B)/B) if (N%B-(b)>0) else 0) for b in range(B)]
 
     if B == 1:
         return [N]
