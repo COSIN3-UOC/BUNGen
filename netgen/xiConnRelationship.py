@@ -5,7 +5,7 @@ Created on Thu Feb 24 20:18:06 2022
 
 @author: mariapalazzi
 """
-
+from .ballcurve import ballcurve
 
 def xiConnRelationship(rw: int, cl: int, xi: float) -> int:
     """
@@ -27,7 +27,7 @@ def xiConnRelationship(rw: int, cl: int, xi: float) -> int:
     E = 0  # edge counter
     for i in range(cl):
         x = i / cl  # tessellate
-        y = 1 - (1 - x ** (1 / xi)) ** xi  # unite ball equation
+        y = ballcurve(x,xi) #1 - (1 - x ** (1 / xi)) ** xi  # unit ball equation
         for j in range(rw):
             if j / rw >= y:
                 E += 1
