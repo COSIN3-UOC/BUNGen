@@ -19,7 +19,7 @@ positional arguments:
 10) link_density = float: If fixedConn = True, this parameter specifies the desired connectance [0,1]. If fixedConn = False, it specifies xi >= 0.
 
 ## Output:
-A numpy matrix that corresponds to the binary synthetic adjacency matrix (biadjacency for bipartite cases), and/or a numpy matrix with link probabilities.
+A numpy matrix that corresponds to the binary synthetic adjacency matrix (biadjacency for bipartite cases), and/or a numpy matrix with link probabilities, two lists of ints containing the rows and columns partition labels, respectively.
 
 ## System Requirements 	
 	
@@ -33,11 +33,11 @@ To produce a single network with desired parameters within a custom made script.
 ```python
 from netgen import NetworkGenerator
 
-M,_ = NetworkGenerator.generate(500, 500, 4, bipartite=True, P=0.5, mu=0.5, 
+M,*_ = NetworkGenerator.generate(500, 500, 4, bipartite=True, P=0.5, mu=0.5, 
 	alpha=2.5, min_block_size=0, fixedConn=False, link_density=2.45)
 
 ```
-Keep in mind that the parameters are positional. If user does not pass the parameters as named arguments, then order must be respected. If the user wants the function to return the matrix of link probabilities edit the line above by replacing M,_ with M,Pij or  _ ,Pij. 
+Keep in mind that the parameters are positional. If user does not pass the parameters as named arguments, then order must be respected. If the user wants the function to return the matrix of link probabilities edit the line above by replacing M,* _ = with M,Pij,* _ =  or if the users wants the rows and columns partition labels edit the line above as M,Pij,rowsLabels,colsLabels = 
 
 To produce several networks simultaneously while varying some parameter and keeping others fixed:
 ```python
@@ -47,7 +47,7 @@ gen =  NetworkGenerator(500, 500, 4, bipartite=True, P=0.5,mu=0.5, alpha=2.5,
 	min_block_size=0, fixedConn=False, link_density=2.45)
 
 for p in np.arange(0,1,0.2):
-     M,_ = gen(P=p)
+     M,*_ = gen(P=p)
      # do something with each M (plot, save, append, etc)
 
 ```
