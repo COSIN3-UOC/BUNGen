@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 from numpy.typing import ArrayLike
-from numpy import array, fill_diagonal, triu
+from numpy import array, fill_diagonal, triu, repeat
 from .network_generator import network_generator
 from .heterogenousBlockSizes import heterogenousBlockSizes
 from .xiFunConn import xiFunConn
@@ -33,14 +33,16 @@ class NetworkGenerator:
             )
         return self.cx, self.cy
 
-    def synthetic_network(self) -> tuple[ArrayLike, ArrayLike]:
+    def synthetic_network(self) -> tuple[ArrayLike, ArrayLike,List[int],List[int]]:
         Mij = network_generator(self.rows, self.columns, self.block_number, self.cy, self.cx, self.xi, self.P, self.mu)
         Mrand = array(uniform(0, 1, size=(self.rows, self.columns)))
+        labelRows = repeat(range(len(self.cy)),self.cy).tolist()
+        labelCols = repeat(range(len(self.cx)),self.cx).tolist()
         M = (Mij > Mrand).astype(int)
         if not self.bipartite:
             fill_diagonal(M, 0)
             M = triu(M, k=1) + (triu(M, k=1)).T
-        return M, Mij
+        return M, Mij, labelRows, labelCols
 
     @property
     def xi(self) -> float:
@@ -60,7 +62,7 @@ class NetworkGenerator:
         if self.fixedConn and self.link_density>1:
             raise ValueError(f"If parameter 'fixedConn' is True, then 'link_density' cannot be greater than 1")
     
-    def __call__(self, **kwargs) -> tuple[ArrayLike, ArrayLike]:
+    def __call__(self, **kwargs) -> tuple[ArrayLike, ArrayLike, List[int], List[int]]:
         for param in self.__annotations__.keys():
             if param in kwargs:
                 setattr(self, param, kwargs[param])
