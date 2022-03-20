@@ -23,7 +23,7 @@ A numpy matrix that corresponds to the binary synthetic adjacency matrix (biadja
 
 ## System Requirements 	
 	
-- Python 3.x.
+- Python >= 3.9.x
 - numpy >= 1.20.0
 - scipy = *
 
