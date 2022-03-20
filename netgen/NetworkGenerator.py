@@ -6,6 +6,7 @@ from .network_generator import network_generator
 from .heterogenousBlockSizes import heterogenousBlockSizes
 from .xiFunConn import xiFunConn
 from numpy.random import uniform
+import warnings
 
 
 @dataclass
@@ -47,8 +48,12 @@ class NetworkGenerator:
     @property
     def xi(self) -> float:
         if self.fixedConn == True:
+            maxConn = sum([(x*y) for x,y in zip(self.cx,self.cy)])/(self.rows*self.columns)
             xi = xiFunConn(self.cx, self.cy, self.rows, self.columns, self.link_density)
-            print(f"xi value for desired connectance {xi:.2f}")  # to verify
+            if maxConn < self.link_density:
+                warnings.warn(f"Desired connectance not possible for parameters combination. Max connectance {maxConn:.3f}")
+            else:
+                print(f"xi value for desired connectance {xi:.2f}") 
         else:
             xi = round(self.link_density, 2)
         return xi
@@ -60,7 +65,7 @@ class NetworkGenerator:
     def __post_init__(self) -> None:
         self.get_block_sizes()
         if self.fixedConn and self.link_density>1:
-            raise ValueError(f"If parameter 'fixedConn' is True, then 'link_density' cannot be greater than 1")
+            raise ValueError("If parameter 'fixedConn' is True, then 'link_density' cannot be greater than 1")
     
     def __call__(self, **kwargs) -> tuple[ArrayLike, ArrayLike, List[int], List[int]]:
         for param in self.__annotations__.keys():
