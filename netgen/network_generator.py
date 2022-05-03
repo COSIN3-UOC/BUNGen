@@ -62,7 +62,6 @@ def network_generator(
     cscx.insert(0, 0)
     M_no = zeros((int(rw), int(cl)))
     le = []
-    Pi = ((b - 1) * mu) / b
     lb = []
 
     # for each block generate a nested structure
@@ -76,15 +75,19 @@ def network_generator(
         le += [M_no[cscy[ii] : cscy[ii + 1], cscx[ii] : cscx[ii + 1]].sum()]
         lb += [cy[ii] * cx[ii]]
 
+    cslb = sum(lb)
+    Et=M_no.sum(dtype=int)
+    Pi = mu*(1 - cslb/(rw*cl))
+    p_inter = (mu*Et)/(rw*cl)
     for ix in range(int(b)):
         # prob of having a link outside blocks
-        p_inter = (mu * le[ix]) / (lb[ix] * b) if ((lb[ix] * b) != 0) else 0
         M_no[cscy[ix] : cscy[ix + 1], :] = p_inter
         M_no[:, cscx[ix] : cscx[ix + 1]] = p_inter
         j, i = indices((cy[ix], cx[ix]))
+        
         Pr = (
-            (P * le[ix]) / ((cx[ix] * cy[ix]) - le[ix] + (P * le[ix]))
-            if ((cx[ix] * cy[ix]) - le[ix] + (P * le[ix])) != 0
+            (P * le[ix]) / (lb[ix] - le[ix] + (P * le[ix]))
+            if (lb[ix] - le[ix] + (P * le[ix])) != 0
             else 0
         )
         # heaviside function to produce the nested structure
