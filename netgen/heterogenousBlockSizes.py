@@ -5,7 +5,7 @@ Created on Sun Feb 13 21:44:01 2022
 
 @author: mariapalazzi
 """
-from numpy.random import rand
+from numpy.random import rand, uniform
 from typing import List
 from math import ceil
 
@@ -49,7 +49,9 @@ def heterogenousBlockSizes(B: int, N: int, min_block_size: int = 0, alpha: float
     if B == 1:
         return [N]
     if B == 2:
-        return [N - (N // B) , N // B]
+        r = uniform(0.1,.9)
+        min_block_size = int(N * r)
+        return sorted([abs(N - min_block_size) , min_block_size],reverse=True)
 
     if 3 <= alpha or alpha < 1:
         raise ValueError("alpha must be between (1,3)")
