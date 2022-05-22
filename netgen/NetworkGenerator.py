@@ -51,7 +51,7 @@ class NetworkGenerator:
             maxConn = sum([(x*y) for x,y in zip(self.cx,self.cy)])/(self.rows*self.columns)
             xi = xiFunConn(self.cy, self.cx, self.rows, self.columns, self.link_density)
             if maxConn < self.link_density:
-                warnings.warn(f"Desired connectance not possible for parameters combination. Max connectance {maxConn:.3f}")
+                raise ValueError(f"Desired connectance not possible for parameters combination. Max connectance {maxConn:.3f}")
             else:
                 print(f"xi value for desired connectance {xi:.2f}") 
         else:
