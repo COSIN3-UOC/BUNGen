@@ -39,7 +39,7 @@ M,*_ = NetworkGenerator.generate(500, 500, 4, bipartite=True, P=0.5, mu=0.5,
 ```
 Keep in mind that the parameters are positional. If user does not pass the parameters as named arguments, then order must be respected. If the user wants the function to return the matrix of link probabilities edit the line above by replacing M,* _ = with M,Pij,* _ =  or if the users wants the rows and columns partition labels edit the line above as M,Pij,rowsLabels,colsLabels = 
 
-To produce several networks simultaneously while varying some parameter and keeping others fixed:
+To produce several networks of the same size and same number of blocks, while varying some parameter and keeping others fixed:
 ```python
 from netgen import NetworkGenerator
 
