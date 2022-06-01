@@ -16,7 +16,7 @@ class NetworkGenerator:
     block_number: int
     P: float
     mu: float
-    alpha: float
+    gamma: float
     bipartite: bool
     min_block_size: int
     fixedConn: bool
@@ -24,13 +24,13 @@ class NetworkGenerator:
 
     def get_block_sizes(self) -> tuple[List[int], List[int]]:
         self.cy = heterogenousBlockSizes(
-            self.block_number, self.rows, alpha=self.alpha, min_block_size=self.min_block_size
+            self.block_number, self.rows, gamma=self.gamma, min_block_size=self.min_block_size
         )
         if self.rows == self.columns:
             self.cx = self.cy
         else:
             self.cx = heterogenousBlockSizes(
-                self.block_number, self.columns, alpha=self.alpha, min_block_size=self.min_block_size
+                self.block_number, self.columns, gamma=self.gamma, min_block_size=self.min_block_size
             )
         return self.cx, self.cy
 
@@ -88,7 +88,7 @@ class NetworkGenerator:
         block_number: int,
         P: float,
         mu: float,
-        alpha: float,
+        gamma: float,
         bipartite: bool,
         min_block_size: int,
         fixedConn: bool,
@@ -100,7 +100,7 @@ class NetworkGenerator:
             block_number=block_number,
             P=P,
             mu=mu,
-            alpha=alpha,
+            gamma=gamma,
             bipartite=bipartite,
             min_block_size=min_block_size,
             fixedConn=fixedConn,
