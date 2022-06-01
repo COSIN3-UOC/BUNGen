@@ -11,7 +11,7 @@ positional arguments:
 3) block_number   = int >= 1: number of prescribed blocks (i.e. modules) in the network.
 4) P   = in [0, 1] parameter that controls the amount of noise outside a perfectly nested structure.
 5) mu  = in [0, 1] parameter that controls the amount of inter-block (i.e. between modules) noise.
-6) alpha = float: bounded in (x1,x2), alpha is the scaling parameter of the distribution of block sizes. Default is alpha = 2.5. 
+6) gamma = float: bounded in (x1,x2), alpha is the scaling parameter of the distribution of block sizes. Default is gamma = 2.5. 
 	For networks with equally-sized blocks set alpha = 0.
 7) bipartite = bool: True for bipartite networks, false for unipartite. If not given, it will generate a unipartite network.
 8) min_block_size = int: minimum block size, default 10% of rows and cols, respectively.
@@ -34,7 +34,7 @@ To produce a single network with desired parameters within a custom made script.
 from netgen import NetworkGenerator
 
 M,*_ = NetworkGenerator.generate(500, 500, 4, bipartite=True, P=0.5, mu=0.5, 
-	alpha=2.5, min_block_size=0, fixedConn=False, link_density=2.45)
+	gamma=2.5, min_block_size=0, fixedConn=False, link_density=2.45)
 
 ```
 Keep in mind that the parameters are positional. If user does not pass the parameters as named arguments, then order must be respected. If the user wants the function to return the matrix of link probabilities edit the line above by replacing M,* _ = with M,Pij,* _ =  or if the users wants the rows and columns partition labels edit the line above as M,Pij,rowsLabels,colsLabels = 
@@ -43,7 +43,7 @@ To produce several networks of the same size and same number of blocks, while va
 ```python
 from netgen import NetworkGenerator
 
-gen =  NetworkGenerator(500, 500, 4, bipartite=True, P=0.5,mu=0.5, alpha=2.5, 
+gen =  NetworkGenerator(500, 500, 4, bipartite=True, P=0.5,mu=0.5, gamma=2.5, 
 	min_block_size=0, fixedConn=False, link_density=2.45)
 
 for p in np.arange(0,1,0.2):
@@ -63,9 +63,9 @@ If you want to produce a network with a given connectance replace fixedConn to t
 python generate_synthetic_networks.py 100 200 2 0.1 0.1 .005 -f
 
 ```
-To modify the remaining parameters just add -a value if you want to modify the alpha default value from the powerlaw
+To modify the remaining parameters just add -a value if you want to modify the gamma default value from the powerlaw
 ``` sh
-python generate_synthetic_networks.py 100 200 2 0.1 0.1 .005 -f -a 2.1
+python generate_synthetic_networks.py 100 200 2 0.1 0.1 .005 -f -ga 2.1
 
 ```
 
