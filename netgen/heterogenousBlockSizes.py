@@ -10,7 +10,7 @@ from typing import List
 from math import ceil
 
 
-def heterogenousBlockSizes(B: int, N: int, min_block_size: int = 0, alpha: float = 2.5) -> List[int]:
+def heterogenousBlockSizes(B: int, N: int, min_block_size: int = 0, gamma: float = 2.5) -> List[int]:
     """
     This function will generate heterogenous block sizes, following a powerlaw distribution.
     As in Clauset A, et al. SIAM Rev., 51(4), 661–703 2009.
@@ -31,7 +31,7 @@ def heterogenousBlockSizes(B: int, N: int, min_block_size: int = 0, alpha: float
         number of blocks on which the nodes will be divided
     x_min: int
         be the lower bound, i.e, minimum block size, default 10% of N
-    alpha: float bounded in (x1,x2)
+    gamma: float bounded in (x1,x2)
         be the scaling parameter of the distribution, default 2.5
     output:
 
@@ -40,7 +40,7 @@ def heterogenousBlockSizes(B: int, N: int, min_block_size: int = 0, alpha: float
     """
     if min_block_size == 0:
         min_block_size = int(N * 0.1)
-    if alpha == 0:
+    if gamma == 0:
         if N % B != 0:
             print(f"The number of nodes is not divisible by B. {N} % {B} = {N%B}")
             print(f"The remaining {N%B} node(s) will be redistributed along the blocks.")
@@ -53,13 +53,13 @@ def heterogenousBlockSizes(B: int, N: int, min_block_size: int = 0, alpha: float
         min_block_size = int(N * r)
         return sorted([abs(N - min_block_size) , min_block_size],reverse=True)
 
-    if 3 <= alpha or alpha < 1:
-        raise ValueError("alpha must be between (1,3)")
+    if 3 <= gamma or gamma < 1:
+        raise ValueError("gamma must be between (1,3)")
     clsum = 1
     maxn = N
     while (clsum != N) or (maxn >= N / 2):
         r = rand(B)
-        x_smp = min_block_size * (1 - r) ** (-1 / (alpha - 1))
+        x_smp = min_block_size * (1 - r) ** (-1 / (gamma - 1))
         colsizes = x_smp.round(0).astype(int).tolist()
         clsum = sum(colsizes)
         maxn = max(colsizes)
