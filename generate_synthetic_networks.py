@@ -26,7 +26,7 @@ if __name__ == "__main__":
     parser.add_argument("P", type=float, help="P")
     parser.add_argument("mu", type=float, help="mu")
     parser.add_argument("link_density", type=float, help="link_density")
-    parser.add_argument("-a", "--alpha", type=float, default=2.5, help="alpha")
+    parser.add_argument("-ga", "--gamma", type=float, default=2.5, help="gamma")
     parser.add_argument("-b", "--min_block_size", type=int, default=0, help="min block size")
     parser.add_argument("-u", "--unipartite", action="store_false", help="unipartite")
     parser.add_argument("-f", "--fixedConn", action="store_true", help="fixed Conn")
@@ -40,7 +40,7 @@ if __name__ == "__main__":
             bipartite=args.unipartite,
             P=args.P,
             mu=args.mu,
-            alpha=args.alpha,
+            gamma=args.gamma,
             min_block_size=args.min_block_size,
             fixedConn=args.fixedConn,
             link_density=args.link_density,
@@ -53,5 +53,5 @@ if __name__ == "__main__":
     else:
         print("Creating the synthetic network for the parameters given")
         M, _ = gen()
-        # M,_ = NetworkGenerator.generate(rows=args.rows,columns=args.columns,block_number=args.block_number,bipartite=args.unipartite,P=args.P,mu=args.mu,alpha=args.alpha,min_block_size=args.min_block_size,fixedConn=args.fixedConn,link_density=args.link_density,)
+        # M,_ = NetworkGenerator.generate(rows=args.rows,columns=args.columns,block_number=args.block_number,bipartite=args.unipartite,P=args.P,mu=args.mu,gamma=args.gamma,min_block_size=args.min_block_size,fixedConn=args.fixedConn,link_density=args.link_density,)
         savetxt(name, M, fmt="%d", delimiter=",")
