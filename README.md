@@ -11,8 +11,8 @@ positional arguments:
 3) block_number   = int >= 1: number of prescribed blocks (i.e. modules) in the network.
 4) P   = in [0, 1] parameter that controls the amount of noise outside a perfectly nested structure.
 5) mu  = in [0, 1] parameter that controls the amount of inter-block (i.e. between modules) noise.
-6) gamma = float: bounded in (x1,x2), alpha is the scaling parameter of the distribution of block sizes. Default is gamma = 2.5. 
-	For networks with equally-sized blocks set alpha = 0.
+6) gamma = float: bounded in (x1,x2), gamma is the scaling parameter of the distribution of block sizes. Default is gamma = 2.5. 
+	For networks with equally-sized blocks set gamma = 0.
 7) bipartite = bool: True for bipartite networks, false for unipartite. If not given, it will generate a unipartite network.
 8) min_block_size = int: minimum block size, default 10% of rows and cols, respectively.
 9) fixedConn = bool: True if you want to produce a network with prescribed connetance. False if you want to set a specific xi value.
