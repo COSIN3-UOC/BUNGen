@@ -1,4 +1,8 @@
+"""
+Created on Thu Sep 14 13:11:07 2017
 
+@author: maria
+"""
 from typing import List
 from numpy import cumsum, indices, zeros
 from numpy.typing import ArrayLike
@@ -65,10 +69,16 @@ def generate_probability_matrix(
 
         # heaviside function to produce the nested structure
         H = ((j[::-1, :] ) / cy[ii]) >= ballcurve((i / cx[ii]), xi)
+        
+        # Ensure the block-local first row/col are in the noiseless nested mask
+        H[0, :] = True
+        H[:, 0] = True
 
         M_no[cscy[ii] : cscy[ii + 1], cscx[ii] : cscx[ii + 1]] = H
         le += [M_no[cscy[ii] : cscy[ii + 1], cscx[ii] : cscx[ii + 1]].sum()]
         lb += [cy[ii] * cx[ii]]
+
+    
 
     cslb = sum(lb)
     Et=M_no.sum(dtype=int)
@@ -87,8 +97,13 @@ def generate_probability_matrix(
         )
         # heaviside function to produce the nested structure
         H = ((j[::-1, :]) / cy[ix]) >= ballcurve((i / cx[ix]), xi)
+        
+        # Ensure the block-local first row/col are in the noiseless nested mask
+        H[0, :] = True
+        H[:, 0] = True
 
         # prob of having a link within blocks
         p_intra = ((1 - p[ix] + (p[ix] * Pr)) * H + Pr * (1 - H)) * (1 - p_i)
         M_no[cscy[ix] : cscy[ix + 1], cscx[ix] : cscx[ix + 1]] = p_intra
+
     return M_no
