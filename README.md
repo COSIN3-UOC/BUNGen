@@ -85,7 +85,7 @@ Keep in mind that the parameters are positional. If user does not pass the param
 
 
 # Citations
-Harry R. de los Ríos, María J. Palazzi, Aniello Lampo, Albert Solé-Ribalta, and Javier Borge-Holthoefer. Bipartite structural evaluation: Extended network generation model and corrected randomization techniques. Biorxiv (2025) DOI: [10.1101/2021.10.21.465267] (https://doi.org/10.1101/2021.10.21.465267)
+Harry R. de los Ríos, María J. Palazzi, Aniello Lampo, Albert Solé-Ribalta, and Javier Borge-Holthoefer. Bipartite structural evaluation: Extended network generation model and corrected randomization techniques. Biorxiv (2025) DOI: [10.1101/2021.10.21.465267](https://doi.org/10.1101/2021.10.21.465267)
 
 A. Solé-Ribalta, CJ. Tessone, M S. Mariani, and J Borge-Holthoefer. Revealing in-block nestedness: Detection and benchmarking, Phys. Rev. E 97, 062302 (2018). DOI: [10.1103/PhysRevE.97.062302](https://doi.org/10.1103/PhysRevE.97.062302)
 
